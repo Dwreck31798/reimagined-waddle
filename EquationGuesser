@@ -1,0 +1,100 @@
+import random
+
+# ---Establishing variables x1 y1 x2 y2---
+
+firstIn = input("Enter first input: ")
+firstOut = input("Enter first output: ")
+secondIn = input("Enter second input: ")
+secondOut = input("Enter second output: ")
+print("..working master..")
+
+# --- every possible input in an equation, open for condensing if possible, considering adding mathmatical phrases to make--
+# --- the list smaller if possible.
+
+characters = ["1","2","3","4","5","6","7","8","9","0","-","+","*","**","/",".","(",")","x"]
+answer1 = ""
+answer2 = ""
+equation = ""
+used = []
+
+# --- The index will represent the equation. later, each integer will correlate to a spot on the variable list characters. --
+# --- A good example would be [0,0,0,0,0] will equal the string "11111" and [2,10,18,11,0] will equal "2-x+1"
+index = [0,0,0,0,0]
+
+
+# --- Here is the equation guesser, it will start at index [0,0,0,0,0] because we defined index already. it will take in the index, --
+# --- and output the next possible combination. For our first example [0,0,0,0,0] will become [0,0,0,0,1] and so on --
+
+def equation_guesser(ind):
+    while ind[4] <= 18:
+        while ind[3] <= 18:
+            while ind[2] <= 18:
+                while ind[1] <= 18:
+                    while ind[0] < 18:
+                        ind[0] += 1
+                        if ind[0] == 18 and ind[1] == 18 and ind[2] == 18 and ind[3] == 18 and ind[4] == 18:
+                            print("No possible equation within 5 characters")
+                            exit()
+                        return index
+                    ind[1] += 1
+                    ind[0] = -1
+                ind[2] += 1
+                ind[1] = 0
+                ind[0] = -1
+            ind[3] += 1
+            ind[2] = 0
+            ind[1] = 0
+            ind[0] = -1
+        ind[4] += 1
+        ind[3] = 0
+        ind[2] = 0
+        ind[1] = 0
+        ind[0] = -1
+
+
+
+# --- Here is the syntax tester, it will test to see if a string can execute as math. example "))//0" will output false and
+# --- "2*x-1" will output true b is the index and z is the equation, remember the equation is just a reflection of index --
+
+def syntax_tester(z, b):
+
+# --- These if statements are only here to stop the programing from running the equation "x^x^x" it will take to long to compute--
+
+    if b[1] == 13 and b[3] == 13:
+        return False
+    if b[2] ==13 and b[4] == 13:
+        return False
+    try:
+        x = 0
+        a = 0
+        exec("a =" + z)
+        x = 1
+        a = 0
+        exec("a =" + z)
+        x = 5000
+        a = 0
+        exec("a ="+z)
+        return True
+    except:
+        return False
+
+# --- Here is the actual begining of our program, will run until an equation matches all inputs and outputs or if all possiblities --
+# --- are excercised
+while int(firstOut) != answer1:
+    index = equation_guesser(index)
+    equation = characters[index[0]]+characters[index[1]]+characters[index[2]]+characters[index[3]]+characters[index[4]]
+    if syntax_tester(equation, index) == True:
+
+        answer1 = ""
+        x = int(firstIn)
+        exec("answer1 ="+equation)
+    if int(firstOut) == answer1:
+        answer2 = ""
+        x = int(secondIn)
+        exec("answer2 =" + equation)
+        if int(secondOut) == answer2:
+            print("done: "+ str(equation))
+        else:
+            answer2 = ""
+            answer1 = ""
+            
